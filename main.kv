@@ -1,0 +1,189 @@
+#:kivy 1.0.5
+
+<MainScreen>:
+    canvas:
+        Color:
+            rgba: 0.53, 0.81, 0.92, 1  # 天空蓝
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # 地面
+        Color:
+            rgba: 0.13, 0.55, 0.13, 1  # 深绿色
+        Rectangle:
+            pos: 0, 0
+            size: self.width, 100
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        padding: 20
+
+        # 标题
+        Label:
+            text: '老奶快跑'
+            font_size: 48
+            color: 0.55, 0.27, 0.07, 1  # 棕色
+            size_hint_y: None
+            height: 80
+
+        # 模式选择按钮
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+            size_hint_y: None
+            height: 200
+
+            Button:
+                text: '无限模式'
+                font_size: 24
+                background_color: 0.31, 0.71, 0.39, 1  # 绿色
+                color: 1, 1, 1, 1
+                size_hint_y: None
+                height: 60
+                on_press: root.start_infinite_mode
+
+            Button:
+                text: '关卡模式'
+                font_size: 24
+                background_color: 0.13, 0.51, 0.94, 1  # 蓝色
+                color: 1, 1, 1, 1
+                size_hint_y: None
+                height: 60
+                on_press: root.start_level_mode
+
+        # 操作说明
+        Label:
+            text: '按空格键或↑键跳跃\n按↓键下蹲翻滚躲避障碍'
+            font_size: 18
+            color: 0, 0, 0, 1
+            halign: 'center'
+            size_hint_y: None
+            height: 80
+
+<GameScreen>:
+    canvas:
+        Color:
+            rgba: 0.53, 0.81, 0.92, 1  # 天空蓝
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        # 地面
+        Color:
+            rgba: 0.13, 0.55, 0.13, 1  # 深绿色
+        Rectangle:
+            pos: 0, 0
+            size: self.width, 100
+
+    # 玩家角色（简化为矩形）
+    Widget:
+        id: player
+        pos: root.player_pos
+        size: 50, 60
+        canvas:
+            Color:
+                rgba: 0.55, 0.27, 0.07, 1  # 棕色
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    # UI信息
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None, None
+        size: 300, 100
+        pos: 10, root.height - 110
+
+        Label:
+            text: root.score_text
+            font_size: 24
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: 40
+
+        Label:
+            text: root.coins_text
+            font_size: 24
+            color: 1, 0.84, 0, 1  # 金色
+            size_hint_y: None
+            height: 40
+
+    # 虚拟按键（仅手机模式显示）
+    BoxLayout:
+        id: virtual_controls
+        orientation: 'horizontal'
+        size_hint: None, None
+        size: 200, 100
+        pos: root.width - 210, 10
+        opacity: 1 if root.mobile_mode else 0
+
+        Button:
+            text: '跳跃'
+            font_size: 18
+            background_color: 0.39, 0.59, 1, 1  # 蓝色
+            color: 1, 1, 1, 1
+            on_press: root.jump_action
+
+        Button:
+            text: '翻滚'
+            font_size: 18
+            background_color: 1, 0.59, 0.39, 1  # 橙色
+            color: 1, 1, 1, 1
+            on_press: root.roll_action
+
+<GameOverScreen>:
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 0.5  # 半透明黑色
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 40
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: None, None
+        size: 400, 500
+
+        Label:
+            text: '游戏结束!'
+            font_size: 48
+            color: 1, 0, 0, 1  # 红色
+            size_hint_y: None
+            height: 80
+
+        Label:
+            text: root.final_score_text
+            font_size: 24
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: 50
+
+        Label:
+            text: root.final_coins_text
+            font_size: 24
+            color: 1, 0.84, 0, 1  # 金色
+            size_hint_y: None
+            height: 50
+
+        Button:
+            text: '重新开始'
+            font_size: 24
+            background_color: 0.78, 0.39, 0.39, 1  # 红色
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: 60
+            on_press: root.restart_game
+
+        Button:
+            text: '返回菜单'
+            font_size: 24
+            background_color: 0.51, 0.51, 0.51, 1  # 灰色
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: 60
+            on_press: root.go_to_menu
